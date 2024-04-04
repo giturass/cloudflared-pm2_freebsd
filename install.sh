@@ -1,33 +1,43 @@
-i#!/bin/bash
+#!/bin/bash
 
-# 创建所需目录并导航到该目录
-mkdir -p ~/domains/cloudflared && cd ~/domains/cloudflared
+# 询问用户是否安装 cloudflared
+read -p "您需要安装 cloudflared 吗？(y/n): " install_cloudflared
 
-# 安装 FreeBSD 版本的 cloudflared
-echo "开始安装 cloudflared..."
-wget https://cloudflared.bowring.uk/binaries/cloudflared-freebsd-latest.7z && 
-7z x cloudflared-freebsd-latest.7z && 
-rm cloudflared-freebsd-latest.7z && 
-mv -f ./temp/* ./ && 
-rm -rf temp
+if [ "$install_cloudflared" = "y" ]; then
+    # 创建所需目录并安装 FreeBDS 版本的 cloudflared
+    mkdir -p ~/domains/cloudflared && cd ~/domains/cloudflared
+    echo "开始安装 cloudflared..."
+    wget https://cloudflared.bowring.uk/binaries/cloudflared-freebsd-latest.7z && 
+    7z x cloudflared-freebsd-latest.7z && 
+    rm cloudflared-freebsd-latest.7z && 
+    mv -f ./temp/* ./ && 
+    rm -rf temp
 
-# 验证 cloudflared 是否安装成功
-if [ -f "./cloudflared" ]; then
-    echo "cloudflared 安装成功."
+    # 验证 cloudflared 是否安装成功
+    if [ -f "./cloudflared" ]; then
+        echo "cloudflared 安装成功."
+    else
+        echo "cloudflared 安装失败，请检查您的环境或手动安装 cloudflared."
+        exit 1
+    fi
 else
-    echo "cloudflared 安装失败，请检查您的环境或手动安装 cloudflared."
-    exit 1
+    echo "跳过 cloudflared 安装..."
 fi
 
-# 回到初始目录（这是一个好习惯，特别是在脚本中）
+# 回到初始目录
 cd ~
 
-# 检查 pm2 是否已安装
-read -p "您已安装 pm2 吗? (y/n): " pm2_installed
+# 询问用户是否安装 pm2
+read -p "您需要安装 pm2 吗？(y/n): " install_pm2
 
-if [ "$pm2_installed" != "n" ]; then
+if [ "$install_pm2" = "y" ]; then
     echo "正在安装 pm2..."
-    bash <(curl -s https://raw.githubusercontent.com/k0baya/alist_repl/main/serv00/install-pm2.sh)
+    # 设置 npm 全局目录并安装 pm2
+    mkdir -p ~/.npm-global && 
+    npm config set prefix '~/.npm-global' && 
+    echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.profile && 
+    source ~/.profile && 
+    npm install -g pm2
 
     # 检查 PM2 是否安装成功
     if pm2 -v >/dev/null 2>&1; then
@@ -37,7 +47,7 @@ if [ "$pm2_installed" != "n" ]; then
         exit 1
     fi
 else
-    echo "继续执行脚本..."
+    echo "跳过 pm2 安装..."
 fi
 
 # 提示用户输入 ARGO_TOKEN 并读取输入
