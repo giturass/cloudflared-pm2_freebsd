@@ -38,13 +38,6 @@ elif [ "$install_choice" = "2" ]; then
     mkdir -p ~/domains/cloudflared && cd ~/domains/cloudflared
     echo "开始安装 cloudflared..."
     wget https://cloudflared.bowring.uk/binaries/cloudflared-freebsd-latest.7z && 7z x cloudflared-freebsd-latest.7z && rm cloudflared-freebsd-latest.7z && mv -f ./temp/* ./ && rm -rf temp
-    # 验证 cloudflared 是否安装成功
-    if [ -f "./cloudflared" ]; then
-        echo "cloudflared 安装成功。"
-    else
-        echo "cloudflared 安装失败，请检查您的环境或手动安装 cloudflared。"
-        exit 1
-    fi
 
     # 提示用户输入 ARGO_TOKEN 并读取输入
     read -p "请输入您的 ARGO_TOKEN: " ARGO_TOKEN
