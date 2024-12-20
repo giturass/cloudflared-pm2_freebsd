@@ -28,11 +28,6 @@ if [ "$install_choice" = "1" ]; then
     echo "MY Blog: https://ericlee.pages.dev"
     exit 0
 elif [ "$install_choice" = "2" ]; then
-    # 检查 pm2 是否已安装
-    if ! command -v pm2 &> /dev/null; then
-        echo "pm2 未安装，请先安装 pm2 然后重新运行此脚本。"
-        exit 1
-    fi
 
     # 安装 FreeBSD 版本的 cloudflared
     mkdir -p ~/domains/cloudflared && cd ~/domains/cloudflared
@@ -49,8 +44,7 @@ elif [ "$install_choice" = "2" ]; then
         exit 1
     fi
     # 使用输入的 ARGO_TOKEN 启动 Cloudflare tunnel
-    pm2 start ~/domains/cloudflared/cloudflared -- tunnel --edge-ip-version auto --protocol http2 --heartbeat-interval 10s run --token $ARGO_TOKEN
-    pm2 save # 保存 pm2 的进程列表
+    ~/domains/cloudflared/cloudflared -- tunnel --edge-ip-version auto --protocol http2 --heartbeat-interval 10s run --token $ARGO_TOKEN
     # 脚本结束 显示感谢信息
     echo "感谢 @Saika"
     echo "Saika GitHub: https://github.com/k0baya"
