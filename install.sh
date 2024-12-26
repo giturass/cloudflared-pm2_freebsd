@@ -44,7 +44,8 @@ elif [ "$install_choice" = "2" ]; then
         exit 1
     fi
     # 使用输入的 ARGO_TOKEN 启动 Cloudflare tunnel
-    ~/domains/cloudflared/cloudflared -- tunnel --edge-ip-version auto --protocol http2 --heartbeat-interval 10s run --token $ARGO_TOKEN
+    pm2 start ~/domains/cloudflared/cloudflared -- tunnel --edge-ip-version auto --protocol http2 --heartbeat-interval 10s run --token $ARGO_TOKEN
+    pm2 save
     # 脚本结束 显示感谢信息
     echo "感谢 @Saika"
     echo "Saika GitHub: https://github.com/k0baya"
