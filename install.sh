@@ -26,6 +26,7 @@ if [ "$install_choice" = "1" ]; then
     echo "Author: Eric Lee"
     echo "MY Github: https://github.com/giturass"
     echo "MY Blog: https://ericlee.pages.dev"
+    killall -u $(whoami)
     exit 0
 elif [ "$install_choice" = "2" ]; then
 
